@@ -6,6 +6,7 @@ var sumiregaoka = require("./json/timeTableSumiregaoka.json");
 var takarazuka = require("./json/timeTableTakarazuka.json");
 var debug = 0;
 var text = "";
+var judge = "";
 require('date-utils');
 app.set('views', __dirname + "/views");
 app.set('view engine', 'ejs');
@@ -20,25 +21,35 @@ app.get('/sumi', (req, res) => {
   var dt = new Date();
   var formatted = dt.toFormat("HH24");
   var formatted2 = dt.toFormat("MI");
+  var week = dt.toFormat("DDD");
+  if (week == "Sat" || week == "Sun") {
+    judge = "holiday";
+  } else {
+    judge = "weekdays";
+  }
   debug = Number(formatted);
   add = debug;
   add2 = debug + 1;
   if (formatted2 > 45) {
-    text = "[行き]" + formatted + "時代：" + sumiregaoka.weekdays[add].filter(value => {
+    text = "[行き]" + formatted + "時代：" + sumiregaoka[judge][add].filter(value => {
       return value > formatted2;
     }) + "\n" +
-      add2.toString() + "時代：" + sumiregaoka.weekdays[add2].filter(value => {
+      add2.toString() + "時代：" + sumiregaoka[judge][add2].filter(value => {
         return value < 15;
       });
 
-
+    lineNotify.notify({
+      message: text,
+    });
   } else {
-    text = "[行き]" + formatted + "時代：" + sumiregaoka.weekdays[add].filter(value => {
+    text = "[行き]" + formatted + "時代：" + sumiregaoka[judge][add].filter(value => {
+
       return value > formatted2;
+
     });
     lineNotify.notify({
       message: text,
-    }) + "]";
+    });
   }
   // if (formatted2 > 45) {
 
@@ -51,21 +62,29 @@ app.get('/taka', (req, res) => {
   var dt = new Date();
   var formatted = dt.toFormat("HH24");
   var formatted2 = dt.toFormat("MI");
+  var week = dt.toFormat("DDD");
+  if (week == "Sat" || week == "Sun") {
+    judge = "holiday";
+  } else {
+    judge = "weekdays";
+  }
   debug = Number(formatted);
   add = debug;
   add2 = debug + 1;
   if (formatted2 > 45) {
-    text = "[帰り]" + formatted + "時代" + takarazuka.weekdays[add].filter(value => {
+    text = "[帰り]" + formatted + "時代:" + takarazuka[judge][add].filter(value => {
       return value > formatted2;
     }) + "\n" +
-      add2.toString() + "時代：" + takarazuka.weekdays[add2].filter(value => {
+      add2.toString() + "時代：" + takarazuka[judge][add2].filter(value => {
         return value < 15;
       });
-
+    lineNotify.notify({
+      message: text,
+    });
 
   } else {
     text = "[帰り]" + formatted + "時代："
-      + takarazuka.weekdays[add].filter(value => {
+      + takarazuka[judge][add].filter(value => {
         return value > formatted2;
       });
     lineNotify.notify({
@@ -77,10 +96,15 @@ app.get('/taka', (req, res) => {
   // }
   console.log(add);
   console.log(add2);
+  console.log(week);
   res.end();
 
 });
-
+let dire = () => {
+  lineNotify.notify({
+    message: "この時間ダイヤはありません。",
+  });
+}
 
 app.listen(3000);
 console.log("starting...");
