@@ -18,22 +18,22 @@ app.use(express.static(__dirname + '/public'));
 
 app.get('/sumi', (req, res) => {
   var dt = new Date();
-  var formatted = dt.toFormat("H");
+  var formatted = dt.toFormat("HH24");
   var formatted2 = dt.toFormat("MI");
   debug = Number(formatted);
   add = debug;
   add2 = debug + 1;
   if (formatted2 > 45) {
-    text = formatted + "時代：" + "[" + sumiregaoka.weekdays[add].filter(value => {
+    text = "[行き]" + formatted + "時代：" + sumiregaoka.weekdays[add].filter(value => {
       return value > formatted2;
-    }) + "]" + "\n" + "[" +
+    }) + "\n" +
       add2.toString() + "時代：" + sumiregaoka.weekdays[add2].filter(value => {
         return value < 15;
-      }) + "]";
+      });
 
 
   } else {
-    text = formatted + "時代：" + "[" + sumiregaoka.weekdays[add].filter(value => {
+    text = "[行き]" + formatted + "時代：" + sumiregaoka.weekdays[add].filter(value => {
       return value > formatted2;
     });
     lineNotify.notify({
@@ -45,46 +45,42 @@ app.get('/sumi', (req, res) => {
   // }
   console.log(add);
   console.log(add2);
+  res.end();
 });
 app.get('/taka', (req, res) => {
   var dt = new Date();
-  var formatted = dt.toFormat("H");
+  var formatted = dt.toFormat("HH24");
   var formatted2 = dt.toFormat("MI");
   debug = Number(formatted);
   add = debug;
   add2 = debug + 1;
   if (formatted2 > 45) {
-    text = formatted + "時代：" + "[" + takarazuka.weekdays[add].filter(value => {
+    text = "[帰り]" + formatted + "時代" + takarazuka.weekdays[add].filter(value => {
       return value > formatted2;
-    }) + "]" + "\n" + "[" +
+    }) + "\n" +
       add2.toString() + "時代：" + takarazuka.weekdays[add2].filter(value => {
         return value < 15;
-      }) + "]";
+      });
 
 
   } else {
-    text = formatted + "時代：" + "[" + takarazuka.weekdays[add].filter(value => {
-      return value > formatted2;
-    });
+    text = "[帰り]" + formatted + "時代："
+      + takarazuka.weekdays[add].filter(value => {
+        return value > formatted2;
+      });
     lineNotify.notify({
       message: text,
-    }) + "]";
+    });
   }
   // if (formatted2 > 45) {
 
   // }
   console.log(add);
   console.log(add2);
-});
-app.get('/neko/:name', function (req, res) {
-  res.send('html ' + req.params.name);
-});
-app.get('/hello.txt', function (req, res) {
-  res.send('html2');
-});
-app.get('/hello.txt', function (req, res) {
-  res.sendfile(__dirname + '/public/about.txt');
+  res.end();
+
 });
 
+
 app.listen(3000);
-console.log("starting...")
+console.log("starting...");
