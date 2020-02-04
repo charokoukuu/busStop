@@ -7,6 +7,8 @@ var takarazuka = require("./json/timeTableTakarazuka.json");
 var debug = 0;
 var text = "";
 var judge = "";
+var os = require('os');
+var hostname = os.hostname();
 require('date-utils');
 app.set('views', __dirname + "/views");
 app.set('view engine', 'ejs');
@@ -108,3 +110,4 @@ let dire = () => {
 
 app.listen(3000);
 console.log("starting...");
+console.log(hostname);
