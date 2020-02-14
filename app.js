@@ -12,14 +12,15 @@ var hostname = os.hostname();
 require('date-utils');
 app.set('views', __dirname + "/views");
 app.set('view engine', 'ejs');
-const lineNotify = require('line-notify-nodejs')('ubnCYGu4bTMEDw2QCkO0U6pNMTVbj305HFDxc06lYdL'); // 先ほどコピーしたトークン
+var lineNotify; // 先ほどコピーしたトークン
 app.use(express.static(__dirname + '/public'));
 // app.use((req, res, next) => {
 //   res.send("Custom!");
 //   next();
 // });
 
-app.get('/sumi', (req, res) => {
+app.get('/sumi/:lineurl', (req, res) => {
+  lineNotify = require('line-notify-nodejs')(req.params.lineurl);
   var dt = new Date();
   var formatted = dt.toFormat("HH24");
   var formatted2 = dt.toFormat("MI");
@@ -60,7 +61,8 @@ app.get('/sumi', (req, res) => {
   console.log(add2);
   res.end();
 });
-app.get('/taka', (req, res) => {
+app.get('/taka/:lineurl', (req, res) => {
+  lineNotify = require('line-notify-nodejs')(req.params.lineurl);
   var dt = new Date();
   var formatted = dt.toFormat("HH24");
   var formatted2 = dt.toFormat("MI");
