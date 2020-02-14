@@ -25,8 +25,11 @@ app.get('/sumi/:lineurl', (req, res) => {
   var formatted = dt.toFormat("HH24");
   var formatted2 = dt.toFormat("MI");
   var week = dt.toFormat("DDD");
-  if (week == "Sat" || week == "Sun") {
+  if (week == "Sat") {
     judge = "holiday";
+  } else if (week == Sun) {
+    judge = "sun";
+
   } else {
     judge = "weekdays";
   }
@@ -67,8 +70,11 @@ app.get('/taka/:lineurl', (req, res) => {
   var formatted = dt.toFormat("HH24");
   var formatted2 = dt.toFormat("MI");
   var week = dt.toFormat("DDD");
-  if (week == "Sat" || week == "Sun") {
+  if (week == "Sat") {
     judge = "holiday";
+  } else if (week == Sun) {
+    judge = "sun";
+
   } else {
     judge = "weekdays";
   }
@@ -118,6 +124,6 @@ let dire = () => {
   });
 }
 
-app.listen(3000);
+app.listen(2000);
 console.log("starting...");
 console.log(hostname);
