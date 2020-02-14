@@ -110,6 +110,7 @@ app.get('/eugeo/:lineurl', (req, res) => {
   lineNotify.notify({
     message: "それな",
   });
+  res.end();
 });
 let dire = () => {
   lineNotify.notify({
