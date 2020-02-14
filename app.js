@@ -104,6 +104,13 @@ app.get('/taka/:lineurl', (req, res) => {
   res.end();
 
 });
+
+app.get('/eugeo/:lineurl', (req, res) => {
+  lineNotify = require('line-notify-nodejs')(req.params.lineurl);
+  lineNotify.notify({
+    message: "それな",
+  });
+});
 let dire = () => {
   lineNotify.notify({
     message: "この時間ダイヤはありません。",
